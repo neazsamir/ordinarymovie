@@ -1,0 +1,16 @@
+[
+  { "name": "Most Popular", "value": "popularity.desc" },
+  { "name": "Least Popular", "value": "popularity.asc" },
+  { "name": "Newest Releases", "value": "release_date.desc" },
+  { "name": "Oldest Releases", "value": "release_date.asc" },
+  { "name": "Highest Revenue", "value": "revenue.desc" },
+  { "name": "Lowest Revenue", "value": "revenue.asc" },
+  { "name": "Latest Primary Release", "value": "primary_release_date.desc" },
+  { "name": "Earliest Primary Release", "value": "primary_release_date.asc" },
+  { "name": "Title (A-Z)", "value": "original_title.asc" },
+  { "name": "Title (Z-A)", "value": "original_title.desc" },
+  { "name": "Highest Rated", "value": "vote_average.desc" },
+  { "name": "Lowest Rated", "value": "vote_average.asc" },
+  { "name": "Most Voted", "value": "vote_count.desc" },
+  { "name": "Least Voted", "value": "vote_count.asc" }
+]
