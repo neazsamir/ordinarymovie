@@ -17,9 +17,11 @@ export const fetchMovies = async (genre, page, filter) => {
 		page,
 		sort_by: filter.sortBy || 'popularity.desc',
 		with_original_language: filter.language || '',
+		"vote_average.lte": filter.voteAvLte || 10,
+		"vote_average.gte": filter.voteAvGte || 0,
+		"release_date.gte": filter.releaseGte || '',
 		}
 	})
-		console.log(filter.language)
 	return res
 	} catch (e) {
 		console.log(e)
