@@ -5,7 +5,7 @@ export const MovieCard = ({movie}) => {
 	return (
 		<NavLink key={id} to={`/details/${id}`}>
 		<div className="bg-white text-black rounded-2xl p-2 ">
-			<img className="w-full mb-2 rounded-2xl" src={`https://image.tmdb.org/t/p/original${poster_path}.jpg`} alt={title} />
+			<img className="w-full mb-2 rounded-2xl" src={`https://image.tmdb.org/t/p/original${poster_path}`} onError={(e) => e.target.src = 'https://i.imgur.com/sYhwMdk.jpeg'} alt={title} />
 			<h3 className="font-bold justify-center flex items-center gap-1 text-[22px]">
 				{vote_average.toFixed(1)} <FaStar className="text-yellow-400" />
 			</h3>

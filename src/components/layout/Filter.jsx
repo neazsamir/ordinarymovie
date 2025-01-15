@@ -1,15 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import langs from '../../api/language.json'
 import sortBys from '../../api/sortBy.json'
 
 export const Filter = ({ filter, setFilter, handleClose }) => {
   const [editFilter, setEditFilter] = useState(filter);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditFilter(prev => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setFilter(prev => ({

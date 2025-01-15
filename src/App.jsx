@@ -6,9 +6,10 @@ import { Movies } from './pages/Movies';
 import { MovieDetails } from './pages/MovieDetails';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
+import { Watchlist } from './pages/Watchlist'
 import { trendingMovies } from './api/TrendingMovies';
 import { fullDetails } from './api/FullDetails';
-import { MoviesProvider } from './context/MoviesContext';  // Import the provider
+import { MoviesProvider } from './context/MoviesContext';
 
 export const App = () => {
   const router = createBrowserRouter([
@@ -46,6 +47,10 @@ export const App = () => {
           path: '/details/:movieID',
           element: <MovieDetails />,
           loader: fullDetails,
+        },
+        {
+        	path: '/watchlist',
+        	element: <Watchlist />
         },
         {
           path: '/details',

@@ -221,7 +221,15 @@
     "native": "Català"
 
   },
+  {
 
+    "code": "zh",
+
+    "name": "Chinese",
+
+    "native": "中文"
+
+  },
   {
 
     "code": "ce",
@@ -1814,7 +1822,6 @@
     "native": "isiXhosa"
 
   },
-
   {
 
     "code": "yi",
@@ -1847,15 +1854,6 @@
 
   },
 
-  {
-
-    "code": "zh",
-
-    "name": "Chinese",
-
-    "native": "中文"
-
-  },
 
   {
 

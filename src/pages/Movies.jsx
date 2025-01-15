@@ -1,26 +1,23 @@
 import { MovieCard } from '../components/ui/MovieCard';
-import { fetchMovies } from '../api/FetchMovies';
+import { FetchMovies } from '../api/FetchMovies';
 import { Loader } from '../components/ui/Loader';
 import { Modal } from '../components/ui/Modal';
-import { useMovies } from '../context/MoviesContext';  // Import context hook
-import { useParams } from 'react-router-dom';
+import { useMovies } from '../context/MoviesContext';
+import { useParams, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-
+import { Pagination } from '../components/ui/Pagination'
 export const Movies = () => {
   const { filter, setFilter, data, setData, loading, setLoading } = useMovies();
   const { genre, page } = useParams();
-
-  // Create a key based on genre, page, and filter for caching purposes
+  const location = useLocation()
   const cacheKey = `${genre}-${page || 1}-${JSON.stringify(filter)}`;
-
-  // Check if data is already available for the current genre, page, and filter
-  const isDataAvailable = data[cacheKey];
+  const isDataAvailable = data[cacheKey]; // Check if the data is already cached
 
   const fetch = async () => {
     setLoading(true);
     try {
-      const res = await fetchMovies(genre, page || 1, filter);
-      setData(prevData => ({ ...prevData, [cacheKey]: res.data.results })); // Cache the results
+      const res = await FetchMovies(genre, location.state, page || 1, filter);
+      setData(p => ({ ...p, [cacheKey]: res.data.results }));
     } catch (e) {
       console.log(e);
     } finally {
@@ -29,24 +26,28 @@ export const Movies = () => {
   };
 
   useEffect(() => {
-    // Only fetch if there's no data cached for this genre, page, and filter combination
     if (!isDataAvailable) {
       fetch();
     }
-  }, [genre, page, filter, isDataAvailable]);  // Only trigger fetch when necessary
+  }, [genre, location.state, page, filter, isDataAvailable]);  
 
   return (
-    <div className="mt-10">
+    <div className="my-7">
       <Modal filter={filter} setFilter={setFilter} isLoading={loading} />
       {loading || !isDataAvailable ? (
         <Loader />
+      ) : isDataAvailable.length <= 0 ? (
+        <div className="font-bold text-white text-center mt-[80%]">
+          Request failed! Please adjust your filter or genre.
+        </div>
       ) : (
         <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4">
-          {isDataAvailable && isDataAvailable.map(movie => (
+          {isDataAvailable.map(movie => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>
       )}
+      <Pagination isLoading={loading} />
     </div>
   );
 };

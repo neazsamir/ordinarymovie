@@ -6,7 +6,7 @@ export const MovieDetailsA = ({loader, genreList}) => {
 	const imgUrl = `https://image.tmdb.org/t/p/original`;
 	return (
 		      <div className="mt-5 max-w-[650px] mx-auto grid grid-cols-1 gap-3 md:gap-5 xs:grid-cols-2 mb-10">
-        <img className="rounded-2xl" src={`${imgUrl}${poster_path}`} alt={title} />
+        <img className="rounded-2xl" src={`${imgUrl}${poster_path}`} onError={(e) => e.target.src = 'https://i.imgur.com/sYhwMdk.jpeg'} alt={title} />
         <div className="flex flex-col justify-center">
           <h2 className="text-[130%] md:text-2xl font-bold mb-2">{title}</h2>
           <H3 label="Runtime" value={runtime} />
