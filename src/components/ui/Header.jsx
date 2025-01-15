@@ -32,35 +32,40 @@ export const Header = () => {
 
   return (
     <header className="bg-theme shadow-3xl py-3">
-      <nav className="flex justify-between items-center max-w-6xl px-5 mx-auto text-white">
-      	<FaArrowLeft className="text-2xl" onClick={() => window.history.back()} />
-        <div>
-          <h3 className="text-[20px] font-bold">MOVIEsPHERE</h3>
-        </div>
-        <div
-          className={`${isVisible ? 'left-[0]' : ''} z-50 duration-500 md:static absolute h-full top-0 md:h-fit left-[-100%] md:w-auto bg-gray-900 md:bg-transparent w-[80%] flex px-5`}>
-          <ul className="flex font-bold md:flex-row flex-col md:items-center gap-3 ">
-            <h2 className={`${isVisible ? 'block' : 'hidden'} md:hidden text-3xl mt-2`}> Menu </h2>
-            {
-              navLink.map(link => {
-                const { to, name } = link;
-                return <li key={to} onClick={handleVisiblity}>
-                  <NavLink className="md:hover:scale-110 md:hover:text-white xxs:active:text-theme" to={to}>
-                    {name}
-                  </NavLink>
-                </li>
-              })
-            }
-          </ul>
-        </div>
-        <div className="flex items-center gap-6">
-          <button>
-            <GiHamburgerMenu onClick={handleVisiblity} name="close" className="text-3xl cursor-pointer md:hidden" />
-          </button>
-        </div>
-        <div onClick={handleVisiblity} className={`${isVisible ? 'block opacity-50' : 'hidden opacity-0'} bg-black md:hidden z-40 opacity-0 fixed left-0 top-0 right-0 bottom-0`}>
-        </div>
+    {/*md*/}
+      <nav className="hidden md:flex justify-between items-center max-w-6xl px-5 mx-auto text-white">
+      <NavLink to="/" className="font-bold text-2xl">MOVIEsPHERE</NavLink>
+      <div className="flex items-center gap-3">
+      {
+      navLink.map(link =>  <NavLink to={link.to} key={link.to} className={({isActive}) => {
+      	return isActive ? "font-bold text-[18px] scale-95 transition duration-200 ease-in text-gray-400" : "font-bold text-[18px]";
+      }
+      }>{link.name}</NavLink>)
+      }
+      </div>
+      {/* < md */}
       </nav>
+      <nav className="md:hidden flex justify-between items-center max-w-6xl px-5 mx-auto text-white">
+      <NavLink to="/" className="text-2xl font-bold" >
+      MOVIEsPHERE
+      </NavLink >
+      <button className="text-2xl md:hidden" onClick={handleVisiblity}>
+       <GiHamburgerMenu />
+      </button>
+      </nav>
+      <div onClick={handleVisiblity} className={`${isVisible ? "block" : "hidden"} fixed left-0 right-0 top-0 bottom-0 bg-black opacity-50 z-10`}>
+      </div>
+      <div className={`${!isVisible ? "-left-[250px]" : "left-0"} bg-gray-700 text-white pt-2 pl-3 fixed top-0 z-20 h-screen w-[200px] transition-all duration-300 ease-in`} >
+      <h2 className="text-2xl font-bold"> NAV-MENU </h2>
+      <ul className="flex flex-col gap-y-3 mt-3 ml-2">
+      {
+      	navLink.map(link =>  <li key={link.to}><NavLink to={link.to}  className={({isActive}) => {
+      	return isActive ? "font-bold text-[18px]  transition duration-200 ease-in text-theme" : "font-bold text-[18px]";
+      }
+      }>{link.name}</NavLink></li>)
+      }
+      </ul>
+      </div>
     </header>
   );
 };
