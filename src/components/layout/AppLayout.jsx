@@ -1,6 +1,7 @@
 import { Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
 import { Header } from '../ui/Header';
 import { Loader } from '../ui/Loader'
+import { Footer } from '../ui/Footer'
 export const AppLayout = () => {
   const navigation = useNavigation();
 
@@ -18,7 +19,6 @@ export const AppLayout = () => {
       <Header />
       <div className="m-auto max-w-6xl px-5 text-white">
         <Outlet />
-        <ScrollRestoration />
       </div>
     </>
   );

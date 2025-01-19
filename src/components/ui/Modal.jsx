@@ -7,7 +7,6 @@ export const Modal = ({ filter, setFilter, isLoading }) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   useEffect(() => {
     if (open) {
       document.documentElement.style.overflow = 'hidden';
@@ -26,7 +25,7 @@ export const Modal = ({ filter, setFilter, isLoading }) => {
     <>
       <button
         onClick={handleOpen}
-        className={`text-2xl p-2 bg-white text-theme rounded-full hover:scale-90 transition duration-300 fixed right-[5%] bottom-[5%] shadow-3xl ease-in ${isLoading ? "hidden" : "block"}`}
+        className={`text-2xl p-2 bg-white text-theme rounded-full hover:scale-90 transition duration-300 fixed z-10 right-[5%] bottom-[5%] shadow-3xl ease-in ${isLoading ? "hidden" : "block"}`}
         aria-label="Open Filter Modal"
       >
         <IoFilter />
@@ -35,9 +34,9 @@ export const Modal = ({ filter, setFilter, isLoading }) => {
         <>
           <div
             onClick={handleClose}
-            className="fixed inset-0 bg-black opacity-50 z-90"
+            className="fixed inset-0 bg-black opacity-50 z-40"
           />
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 scale-100 bg-white rounded-xl shadow-lg p-4 w-[90%] max-w-md max-h-[800px] overflow-y-auto overflow-x-hidden z-100">
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  bg-white rounded-xl shadow-lg p-4 w-[90%] max-w-md max-h-[800px] z-50">
             <div className="text-2xl text-black font-bold mb-4">
               Filter
             </div>

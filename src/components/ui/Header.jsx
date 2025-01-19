@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
+import { Overlay } from './Overlay'
 import { FaArrowLeft } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState, useEffect } from 'react';
@@ -15,21 +16,6 @@ export const Header = () => {
   const handleVisiblity = () => {
     setIsVisible(!isVisible);
   };
-
-  useEffect(() => {
-    if (isVisible) {
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-    };
-  }, [isVisible]);
-
   return (
     <header className="bg-theme shadow-3xl py-3">
     {/*md*/}
@@ -53,14 +39,13 @@ export const Header = () => {
        <GiHamburgerMenu />
       </button>
       </nav>
-      <div onClick={handleVisiblity} className={`${isVisible ? "block" : "hidden"} fixed left-0 right-0 top-0 bottom-0 bg-black opacity-50 z-10`}>
-      </div>
+			<Overlay onClick={handleVisiblity} isVisible={isVisible} />
       <div className={`${!isVisible ? "-left-[250px]" : "left-0"} bg-gray-700 text-white pt-2 pl-3 fixed top-0 z-20 h-screen w-[200px] transition-all duration-300 ease-in`} >
       <h2 className="text-2xl font-bold"> NAV-MENU </h2>
       <ul className="flex flex-col gap-y-3 mt-3 ml-2">
       {
-      	navLink.map(link =>  <li key={link.to}><NavLink to={link.to}  className={({isActive}) => {
-      	return isActive ? "font-bold text-[18px]  transition duration-200 ease-in text-theme" : "font-bold text-[18px]";
+      	navLink.map(link =>  <li key={link.to}><NavLink onClick={handleVisiblity} to={link.to}  className={({isActive}) => {
+      	return isActive ? "font-bold text-[18px]  transition duration-200 ease-in text-theme" : "font-bold text-[18px] active:text-theme md:hover:text-theme transition-all duration-300 ease-in ";
       }
       }>{link.name}</NavLink></li>)
       }

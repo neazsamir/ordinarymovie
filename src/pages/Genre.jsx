@@ -2,15 +2,15 @@ import movieGenres from '../api/movieGenre.json'
 import { Button } from '../components/ui/Button'
 import { useState, useEffect } from 'react'
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaQuestion } from "react-icons/fa";
 import { NavLink } from 'react-router-dom'
 import { useMovies } from '../context/MoviesContext'
+import { useGenres } from '../context/GenresContext'
 export const Genre = () => {
-  const [selectedGenre, setSelectedGenre] = useState([])
-  const [excludeGenre, setExcludeGenre] = useState([])
-	const { setFilter, filter } = useMovies()
+  const { excludeGenre, setExcludeGenre, selectedGenre, setSelectedGenre } = useGenres()
+	const { setFilter } = useMovies()
 	useEffect(() => {
 		setFilter({})
-	console.log(setFilter, filter)
 	}, [])
   const handleSelect = (id) => {
     // If the genre is excluded, return early to avoid selecting it
@@ -19,7 +19,6 @@ export const Genre = () => {
       p.includes(id) ? p.filter((genreId) => genreId !== id) : [...p, id]
     )
   }
-
   const handleExclude = (id) => {
     // Exclude the genre
     setExcludeGenre((p) =>
@@ -28,7 +27,34 @@ export const Genre = () => {
     // Also remove it from selected genres if it's excluded
     setSelectedGenre((p) => p.filter((genreId) => genreId !== id))
   }
+  
+  const [isTutorialShown, setIsTutorialShown] = useState(
+  JSON.parse(localStorage.getItem("isTutorialShown")) || false
+);
 
+const handleTutorial = () => {
+	alert(
+      "Feature Tutorial:\n" +
+      "• Click on a genre to select.\n" +
+      "• Double-click on a genre to exclude.\n" +
+      "# You can select/exclude one or more.\n" +
+      "• Finally, click on proceed to get started."
+    );
+    gtag('event', 'button_click', {
+  'event_category': 'User Interaction',
+  'event_label': 'Genre help'
+});
+}
+
+useEffect(() => {
+  if (!isTutorialShown) {
+  	setTimeout(() => {
+    handleTutorial()
+    setIsTutorialShown(true);
+    localStorage.setItem("isTutorialShown", JSON.stringify(true));
+  	}, 500)
+  }
+}, []);
   return (
     <div className="mb-5">
       <h1 className="text-3xl text-center my-5 font-bold">
@@ -62,6 +88,9 @@ export const Genre = () => {
           ><FaMagnifyingGlass /> Proceed</NavLink>
         )}
     </div>
+    <button onClick={handleTutorial} className="text-2xl p-2 bg-white text-theme rounded-full hover:scale-90 transition duration-300 fixed right-[5%] bottom-[5%] shadow-3xl ease-in">
+    <FaQuestion />
+    </button >
     </div>
   )
 }

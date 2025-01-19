@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout.jsx';
 import { Home } from './pages/Home';
 import { Genre } from './pages/Genre';
@@ -10,8 +10,9 @@ import { Watchlist } from './pages/Watchlist'
 import { trendingMovies } from './api/TrendingMovies';
 import { fullDetails } from './api/FullDetails';
 import { MoviesProvider } from './context/MoviesContext';
-
+import { GenresProvider } from './context/GenresContext'
 export const App = () => {
+	window.addEventListener('beforeunload', () => {})
   const router = createBrowserRouter([
     {
       path: '/',
@@ -64,13 +65,19 @@ export const App = () => {
           path: '/contact',
           element: <Contact />,
         },
+        {
+          path: "*",
+          element: <Navigate to="/" />
+        },
       ],
     },
   ]);
 
   return (
+  	<GenresProvider>
     <MoviesProvider>
       <RouterProvider router={router} />
     </MoviesProvider>
+    </GenresProvider>
   );
 };

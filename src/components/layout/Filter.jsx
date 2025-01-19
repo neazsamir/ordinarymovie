@@ -16,6 +16,10 @@ export const Filter = ({ filter, setFilter, handleClose }) => {
     }));
     handleClose()
   };
+  const handleReset = () => {
+  	setFilter({})
+  	setEditFilter({})
+  }
 
   const basicStyle = "w-full bg-transparent border-1 border-solid border-gray-500 border rounded-2xl outline-none text-center font-bold py-1 mt-2";
 
@@ -94,7 +98,11 @@ export const Filter = ({ filter, setFilter, handleClose }) => {
             />
           </div>
         </div>
-        <div className="mt-4 flex justify-end gap-3">
+        <div className="mt-4 text-[13px] flex justify-between gap-3">
+        <button onClick={handleReset} className="px-3 bg-transparent font-bold rounded text-theme">
+        	Reset
+        </button>
+        <div className="flex gap-2">
           <button
           type="button"
             onClick={handleClose}
@@ -106,6 +114,7 @@ export const Filter = ({ filter, setFilter, handleClose }) => {
             className="px-4 py-2 bg-theme text-white rounded-lg hover:bg-theme-dark transition" >
             Save
           </button>
+        </div>
         </div>
       </form>
     </div>
