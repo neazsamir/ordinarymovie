@@ -1,4 +1,4 @@
-import { Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
+import { Outlet, useNavigation } from 'react-router-dom';
 import { Header } from '../ui/Header';
 import { Loader } from '../ui/Loader'
 import { Footer } from '../ui/Footer'
@@ -17,7 +17,7 @@ export const AppLayout = () => {
   return (
     <>
       <Header />
-      <div className="m-auto max-w-6xl px-5 text-white">
+      <div className="m-auto max-w-monitor px-5 text-white">
         <Outlet />
       </div>
     </>

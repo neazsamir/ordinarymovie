@@ -1,5 +1,4 @@
-* # V1.1
-* ## Web feature
+* ## V1.1
 * ### remember genre when navigate back ✓
 * ### mark that in watchlist in suggetion ✓
 * ### upcoming movies ×
@@ -13,9 +12,3 @@
 * ### text-selection color ✓
 * ### fullscreen poster ✓
 * ### restore scroll position ×
-
-* ## G Analytics
-* ### track selected, excluded genre
-* ### track add/romove watchlist
-* ### track genre help button
-* ### track filter save

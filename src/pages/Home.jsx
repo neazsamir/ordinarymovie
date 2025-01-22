@@ -32,7 +32,7 @@ export const Home = () => {
             <h3 className="text-2xl mb-5 font-bold">Trending:</h3>
             <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4">
                 {data.results &&
-                    data.results.slice(0, 10).map((movie, index) => {
+                    data.results.map((movie, index) => {
                         return <MovieCard key={index} movie={movie} />;
                     })}
             </div>

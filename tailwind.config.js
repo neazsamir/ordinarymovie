@@ -25,6 +25,9 @@ export default {
       'xl': '1040px',
       '2xl': '1280px',
     	},
+    	maxWidth: {
+    		'monitor': '1320',
+    	},
     },
   },
   plugins: [require('tailwindcss-motion')],

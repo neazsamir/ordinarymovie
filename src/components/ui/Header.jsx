@@ -19,8 +19,8 @@ export const Header = () => {
   return (
     <header className="bg-theme shadow-3xl py-3">
     {/*md*/}
-      <nav className="hidden md:flex justify-between items-center max-w-6xl px-5 mx-auto text-white">
-      <NavLink to="/" className="font-bold text-2xl">MOVIEsPHERE</NavLink>
+      <nav className="hidden md:flex justify-between items-center max-w-monitor px-5 mx-auto text-white">
+      <NavLink to="/" className="font-bold text-[20px] md:text-2xl">ORDINARY MOVIE</NavLink>
       <div className="flex items-center gap-3">
       {
       navLink.map(link =>  <NavLink to={link.to} key={link.to} className={({isActive}) => {
