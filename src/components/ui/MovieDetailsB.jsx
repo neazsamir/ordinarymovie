@@ -117,27 +117,24 @@ export const MovieDetailsB = ({ loader, genreList }) => {
       <p className="flex items-center gap-1">
         {vote_count} <FaStar className="text-yellow-400" />
       </p>
-      <H3 label="Genres" cls="mt-5 md:hidden" />
+      {
+      	genreList && <H3 label="Genres" cls="mt-5 md:hidden" />
+      }
       <p className="md:hidden">{genreList}</p>
 
-      {trailer ? (
-        <>
           <H3 label={trailer.name} cls="my-5" />
           <div className="relative w-full pb-[56.25%]">
-            <iframe
+            {
+            	trailer && <iframe
               src={`https://www.youtube.com/embed/${trailer.key}`}
               title="Trailer"
               allow="autoplay; encrypted-media"
               allowFullScreen
               className="absolute top-0 left-0 w-full h-full rounded-2xl"
             />
+            }
           </div>
-        </>
-      ) : (
-        <h3 className="text-white text-center mt-5 text-2xl font-bold">
-          Trailer not available!
-        </h3>
-      )}
+
 
       <div className="flex justify-center gap-3 mt-14">
         <a

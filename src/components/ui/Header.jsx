@@ -1,11 +1,14 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { Overlay } from './Overlay'
-import { FaArrowLeft } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState, useEffect } from 'react';
 export const Header = () => {
 	const navigate = useNavigate();
+	const location = useLocation()
+	const toggleSBtn = location.pathname.includes("/s/") || location.pathname === "/s" ? "hidden" : "block"
   const navLink = [
+    { name: <FaSearch className={`${toggleSBtn} text-lg mr-3 hidden md:block`} />, to: '/s'},
     { name: 'Home', to: '/' },
     { name: 'Movies', to: '/movies' },
     { name: 'Watchlist', to: '/watchlist' },
@@ -20,7 +23,7 @@ export const Header = () => {
     <header className="bg-theme shadow-3xl py-3">
     {/*md*/}
       <nav className="hidden md:flex justify-between items-center max-w-monitor px-5 mx-auto text-white">
-      <NavLink to="/" className="font-bold text-[20px] md:text-2xl">ORDINARY MOVIE</NavLink>
+      <NavLink to="/" className="font-bold text-[20px] md:text-2xl"><span><img className="w-20" src="logo.png" alt=" " /></span></NavLink>
       <div className="flex items-center gap-3">
       {
       navLink.map(link =>  <NavLink to={link.to} key={link.to} className={({isActive}) => {
@@ -32,12 +35,15 @@ export const Header = () => {
       {/* < md */}
       </nav>
       <nav className="md:hidden flex justify-between items-center max-w-6xl px-5 mx-auto text-white">
-      <NavLink to="/" className="text-2xl font-bold" >
-      MOVIEsPHERE
-      </NavLink >
+      <NavLink to="/" className="font-bold text-[20px] md:text-2xl"><span><img className="w-16" src="logo.png" alt=" " /></span></NavLink>
+      <div className="flex items-center gap-5">
+      <NavLink className={toggleSBtn} to="/s">
+      <FaSearch className="text-lg" />
+      </NavLink>
       <button className="text-2xl md:hidden" onClick={handleVisiblity}>
        <GiHamburgerMenu />
       </button>
+      </div>
       </nav>
 			<Overlay onClick={handleVisiblity} isVisible={isVisible} />
       <div className={`${!isVisible ? "-left-[250px]" : "left-0"} bg-gray-700 text-white pt-2 pl-3 fixed top-0 z-20 h-screen w-[200px] transition-all duration-300 ease-in`} >

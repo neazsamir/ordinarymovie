@@ -11,6 +11,8 @@ import { trendingMovies } from './api/TrendingMovies';
 import { fullDetails } from './api/FullDetails';
 import { MoviesProvider } from './context/MoviesContext';
 import { GenresProvider } from './context/GenresContext'
+import { Search } from './pages/Search'
+import { SearchResult } from './pages/SearchResult'
 export const App = () => {
 	window.addEventListener('beforeunload', () => {})
   const router = createBrowserRouter([
@@ -48,6 +50,14 @@ export const App = () => {
           path: '/details/:movieID',
           element: <MovieDetails />,
           loader: fullDetails,
+        },
+        {
+          path: '/s',
+          element: <Search />,
+        },
+        {
+          path: '/s/:query',
+          element: <SearchResult />,
         },
         {
         	path: '/watchlist',

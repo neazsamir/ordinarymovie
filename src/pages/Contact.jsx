@@ -2,7 +2,7 @@ import { useState } from 'react';
 import emailjs from 'emailjs-com';
 import { Toast } from '../components/ui/Toast';
 import { IoSend } from "react-icons/io5";
-import { Loader } from '../components/ui/Loader'; // Assuming you have a Loader component
+import { Loader } from '../components/ui/Loader';
 
 export const Contact = () => {
     const [formData, setFormData] = useState({
