@@ -1,47 +1,69 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 import { SearchAPI } from '../api/SearchAPI'
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { Loader } from '../components/ui/Loader';
+import { FaMagnifyingGlass } from "react-icons/fa6"
+import { Loader } from '../components/ui/Loader'
 import { MovieCard } from '../components/ui/MovieCard'
+import useScrollRestore from '../hooks/useScrollRestore';
+import { handleMovieCardClick as saveAndNavigate } from '../utils/scrollHelper';
+
 
 export const SearchResult = () => {
+	const location = useLocation()
 	const { query } = useParams()
-	const [searchQuery, setSearchQuery] = useState(query || '')
-	const [data, setData] = useState(null)
-	const [isLoading, setIsLoading] = useState(false)
+	const [searchQuery, setSearchQuery] = useState(query.replace('+', ' ') || '')
 	const navigate = useNavigate()
+	const loaderRef = useRef()
 	const correctName = `https://www.google.com/search?q=${query} movie`;
-	const [history, setHistory] = useState(JSON.parse(localStorage.getItem("searchHistory")) || [])
-	// Fetch data
-	const fetch = async () => {
-		if (!searchQuery) return
-		setIsLoading(true)
-		try {
-			const res = await SearchAPI(searchQuery.trim())
-			setData(res)
-			console.log(res)
-			if (!history.includes(query)) localStorage.setItem("searchHistory", JSON.stringify([query.trim(), ...history]))
-		} catch (e) {
-			console.log(e)
-		} finally {
-			setIsLoading(false)
+	// Infinite query runs only when `query` exists
+	const {
+		data,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+		status,
+		isLoading,
+	} = useInfiniteQuery({
+		queryKey: ['search', query],
+		queryFn: ({ pageParam = 1 }) => SearchAPI(query?.replace('+', ' '), pageParam),
+		enabled: !!query, // Only run when query param exists
+		getNextPageParam: (lastPage) => {
+			if (lastPage.page < lastPage.total_pages) return lastPage.page + 1
+			return undefined
 		}
-	}
-
-	// Effect to trigger the fetch when query changes
+	})
+	// Load more on scroll
 	useEffect(() => {
-		if (query) {
-			setSearchQuery(query.replace('+', ' '))
-			fetch()
-		}
-	}, [query])
+		const observer = new IntersectionObserver(
+			entries => {
+				if (entries[0].isIntersecting && hasNextPage) {
+					fetchNextPage()
+				}
+			},
+			{ threshold: 1 }
+		)
+		if (loaderRef.current) observer.observe(loaderRef.current)
+		return () => loaderRef.current && observer.unobserve(loaderRef.current)
+	}, [fetchNextPage, hasNextPage])
 
-	// Handle search form submission
+
+	
+	
+
+	// Form submit
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		navigate(`/s/${searchQuery.replace(' ', '+')}`)
+		if (!searchQuery.trim()) return
+		navigate(`/s/${searchQuery.trim().replace(' ', '+')}`)
 	}
+
+	const totalResults = data?.pages?.[0]?.total_results || 0
+
+
+
+useScrollRestore(status === 'success');
+
 
 	return (
 		<>
@@ -57,26 +79,33 @@ export const SearchResult = () => {
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 							/>
-							<button
-								className="text-gray-600 hover:text-gray-800"
-								type="submit"
-							>
+							<button className="text-gray-600 hover:text-gray-800" type="submit">
 								<FaMagnifyingGlass size={20} />
 							</button>
 						</div>
 					</div>
 				</form>
-				<div>
-				{data && data.total_results > 0 ? <h3 className="font-bold text-center text-2xl mt-5" >{data.total_results} Movie(s) found</h3> : <div className="font-bold text-white text-center mt-[80%]">
-          No movie found! please <a className="text-theme" href={correctName} target="_blank">check the correct name</a> and try again.
-        </div>}
+
+				{status === 'success' && totalResults > 0 ? (
+					<h3 className="font-bold text-center text-2xl mt-5">{totalResults} Movie(s) found</h3>
+				) : (
+					<div className="font-bold text-white text-center mt-[80%]">
+						No movie found! please <a className="text-theme" href={correctName} target="_blank">check the correct name</a> and try again.
+					</div>
+				)}
+
 				<div className="mt-3 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4">
-					{
-						data && data.results && data.results.map(movie => (
-							<MovieCard key={movie.id} movie={movie} />
+					{data?.pages.map(page =>
+						page.results.map(movie => (
+							<MovieCard key={movie.id}
+              movie={movie}
+              onClick={() => saveAndNavigate(movie.id, navigate)} />
 						))
-					}
+					)}
 				</div>
+
+				<div ref={loaderRef} className="flex justify-center my-5">
+					{isFetchingNextPage && <Loader />}
 				</div>
 			</div>
 			{isLoading && <Loader />}

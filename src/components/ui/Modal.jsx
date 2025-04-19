@@ -25,7 +25,7 @@ export const Modal = ({ filter, setFilter, isLoading }) => {
     <>
       <button
         onClick={handleOpen}
-        className={`text-2xl p-2 bg-white text-theme rounded-full hover:scale-90 transition duration-300 fixed z-10 right-[5%] bottom-[5%] shadow-3xl ease-in ${isLoading ? "hidden" : "block"}`}
+        className={`text-2xl p-2 bg-white text-theme rounded-full hover:scale-90 transition duration-300 fixed z-10 right-[5%] lg:right-[6%] bottom-[5%] shadow-3xl ease-in ${isLoading ? "hidden" : "block"}`}
         aria-label="Open Filter Modal"
       >
         <IoFilter />

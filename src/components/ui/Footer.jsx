@@ -50,8 +50,8 @@ export const Footer = () => {
           </div>
         </div>
 
-          <p className="text-sm text-center">
-            Made with ❤️ by Neaz Mahmud Samir
+          <p className="text-sm text-center mt-4">
+            Made with ❤️ by Neaz
           </p>
 
       </div>

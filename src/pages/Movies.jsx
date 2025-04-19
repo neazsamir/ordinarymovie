@@ -1,17 +1,24 @@
-import { MovieCard } from '../components/ui/MovieCard';
+import React, { useEffect } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useMovies } from '../context/MoviesContext';
 import { FetchMovies } from '../api/FetchMovies';
+import { MovieCard } from '../components/ui/MovieCard';
 import { Loader } from '../components/ui/Loader';
 import { Modal } from '../components/ui/Modal';
-import { useMovies } from '../context/MoviesContext';
-import { useParams, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-import { Pagination } from '../components/ui/Pagination'
-export const Movies = () => {
+import { Pagination } from '../components/ui/Pagination';
+import useScrollRestore from '../hooks/useScrollRestore';
+import { handleMovieCardClick as saveAndNavigate } from '../utils/scrollHelper';
+
+export const MoviesComponent = () => {
   const { filter, setFilter, data, setData, loading, setLoading } = useMovies();
   const { genre, page } = useParams();
-  const location = useLocation()
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const cacheKey = `${genre}-${page || 1}-${JSON.stringify(filter)}`;
-  const isDataAvailable = data[cacheKey]; // Check if the data is already cached
+  const isDataAvailable = data[cacheKey];
+
+  useScrollRestore(isDataAvailable);
 
   const fetch = async () => {
     setLoading(true);
@@ -29,7 +36,7 @@ export const Movies = () => {
     if (!isDataAvailable) {
       fetch();
     }
-  }, [genre, location.state, page, filter, isDataAvailable]);  
+  }, [genre, location.state, page, filter, isDataAvailable]);
 
   return (
     <div className="my-7">
@@ -42,8 +49,12 @@ export const Movies = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4">
-          {typeof isDataAvailable === "object" && isDataAvailable.map(movie => (
-            <MovieCard key={movie.id} movie={movie} />
+          {isDataAvailable.map(movie => (
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              onClick={() => saveAndNavigate(movie.id, navigate)}
+            />
           ))}
         </div>
       )}
@@ -51,3 +62,5 @@ export const Movies = () => {
     </div>
   );
 };
+
+export const Movies = React.memo(MoviesComponent);

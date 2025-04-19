@@ -5,7 +5,6 @@ import { MovieDetailsB } from '../components/ui/MovieDetailsB';
 export const MovieDetails = () => {
   const loader = useLoaderData();
   const { genres } = loader || {};
-	console.log(loader)
   if (!loader || !genres) {
     return (
       <div className="font-bold text-white text-center mt-[80%]">

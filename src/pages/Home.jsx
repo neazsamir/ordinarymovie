@@ -1,15 +1,18 @@
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Button } from '../components/ui/Button';
 import { MovieCard } from '../components/ui/MovieCard';
 import { Overlay } from '../components/ui/Overlay';
 import { useGenres } from '../context/GenresContext'
+import useScrollRestore from '../hooks/useScrollRestore';
+import { handleMovieCardClick as saveAndNavigate } from '../utils/scrollHelper';
 export const Home = () => {
 	const { setExcludeGenre, setSelectedGenre } = useGenres()
 	const resetGenres = () => {
 		setExcludeGenre([])
 		setSelectedGenre([])
 	}
+	const navigate = useNavigate()
     const [isVisible, setIsVisible] = useState(() => {
         const storedValue = localStorage.getItem("privacyNotShown");
         return storedValue !== null ? JSON.parse(storedValue) : true; // Show popup only if not set
@@ -21,6 +24,12 @@ export const Home = () => {
     };
 
     const data = useLoaderData() || [];
+    
+    
+    useScrollRestore(data?.results);
+    
+    
+    
     return (
         <div>
             <h1 className="text-[30px] mt-3 leading-[40px] font-bold text-center">
@@ -33,7 +42,11 @@ export const Home = () => {
             <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4">
                 {data.results &&
                     data.results.map((movie, index) => {
-                        return <MovieCard key={index} movie={movie} />;
+                        return <MovieCard
+              key={movie.id}
+              movie={movie}
+              onClick={() => saveAndNavigate(movie.id, navigate)}
+              />
                     })}
             </div>
 

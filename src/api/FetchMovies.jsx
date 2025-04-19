@@ -10,7 +10,6 @@ const api = axios.create({
 
 export const FetchMovies = async (genre, withoutGenre, page, filter) => {
   try {
-    console.log(withoutGenre);
     const res = await api.get('3/discover/movie', {
       params: {
         with_genres: genre,

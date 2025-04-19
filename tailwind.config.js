@@ -26,7 +26,7 @@ export default {
       '2xl': '1280px',
     	},
     	maxWidth: {
-    		'monitor': '1320',
+    		'monitor': '1320px',
     	},
     },
   },

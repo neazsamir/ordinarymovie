@@ -3,7 +3,6 @@ export const fullDetails = async ({params}) => {
 	try {
 		const response = await fetch(api)
 	const data = await response.json()
-	console.log(data)
 	return data
 	} catch (e) {
 		console.log(e)
