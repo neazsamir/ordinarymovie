@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { SearchAPI } from '../api/SearchAPI'
 import { FaMagnifyingGlass } from "react-icons/fa6"
@@ -12,11 +12,37 @@ import { handleMovieCardClick as saveAndNavigate } from '../utils/scrollHelper';
 export const SearchResult = () => {
 	const location = useLocation()
 	const { query } = useParams()
-	const [searchQuery, setSearchQuery] = useState(query.replace('+', ' ') || '')
+	const [aiResponse, setAiResponse] = useState(null)
+	const [aiLoading, setAiLoading] = useState(false)
+	const [searchQuery, setSearchQuery] = useState('')
 	const navigate = useNavigate()
 	const loaderRef = useRef()
-	const correctName = `https://www.google.com/search?q=${query} movie`;
-	// Infinite query runs only when `query` exists
+	const findCorrNameOnGGL = `https://www.google.com/search?q=${query} movie`;
+	
+	
+	useEffect(() => {
+	const getAiQuery = async () => {
+		setAiLoading(true)
+		try {
+			const res = await fetch(`http://localhost:3000/api/v1/ai_query/${query}`)
+			const data = await res.json() || null
+			setAiResponse(data?.response || null)
+			console.log(data)
+		} catch (err) {
+			setAiResponse(null)
+		} finally {
+			setAiLoading(false)
+		}
+	}
+	setSearchQuery(query?.replaceAll('+', ' ') || '')
+	getAiQuery()
+	}, [query])
+	
+	useEffect(() => {
+	  if (searchQuery === aiResponse) setAiResponse(null)
+	}, [aiResponse, searchQuery])
+	
+	
 	const {
 		data,
 		fetchNextPage,
@@ -26,7 +52,7 @@ export const SearchResult = () => {
 		isLoading,
 	} = useInfiniteQuery({
 		queryKey: ['search', query],
-		queryFn: ({ pageParam = 1 }) => SearchAPI(query?.replace('+', ' '), pageParam),
+		queryFn: ({ pageParam = 1 }) => SearchAPI(query?.replaceAll('+', ' '), pageParam),
 		enabled: !!query, // Only run when query param exists
 		getNextPageParam: (lastPage) => {
 			if (lastPage.page < lastPage.total_pages) return lastPage.page + 1
@@ -55,7 +81,7 @@ export const SearchResult = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (!searchQuery.trim()) return
-		navigate(`/s/${searchQuery.trim().replace(' ', '+')}`)
+		navigate(`/s/${searchQuery?.trim()?.replaceAll(' ', '+')}`)
 	}
 
 	const totalResults = data?.pages?.[0]?.total_results || 0
@@ -85,14 +111,14 @@ useScrollRestore(status === 'success');
 						</div>
 					</div>
 				</form>
-
-				{status === 'success' && totalResults > 0 ? (
+		{ !aiLoading && aiResponse &&	<h2 className="mt-5 text-sm">Did you mean: <Link to={`/s/${aiResponse?.trim()?.replaceAll(' ', '+')}`} className="font-bold text-blue-300 text-[16px]">{aiResponse}</Link></h2>}
+				{status === 'success' && !isLoading && !aiLoading && totalResults > 0 ? (
 					<h3 className="font-bold text-center text-2xl mt-5">{totalResults} Movie(s) found</h3>
-				) : (
+				) : !aiLoading && !isLoading ? (
 					<div className="font-bold text-white text-center mt-[80%]">
-						No movie found! please <a className="text-theme" href={correctName} target="_blank">check the correct name</a> and try again.
+						No movie found! please <a className="text-theme" href={findCorrNameOnGGL} target="_blank">check the correct name</a> and try again.
 					</div>
-				)}
+				) : ''}
 
 				<div className="mt-3 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4">
 					{data?.pages.map(page =>
@@ -108,7 +134,7 @@ useScrollRestore(status === 'success');
 					{isFetchingNextPage && <Loader />}
 				</div>
 			</div>
-			{isLoading && <Loader />}
+			{isLoading || aiLoading && <Loader />}
 		</>
 	)
 }

@@ -4,11 +4,11 @@
 * ### upcoming movies ×
 * ### release status ✓
 * ### watchlist status: watching, will watch, watched ✓
-* ### search option §
+* ### search option ✓
 * ### report a problem in full details page ✓
-* ### cast photos and info §
-* ### ad blocker detector §
+* ### cast photos and info ×
+* ### ad blocker detector ×
 * ### filter reset option ✓
 * ### text-selection color ✓
 * ### fullscreen poster ✓
-* ### restore scroll position ×
+* ### restore scroll position ✓

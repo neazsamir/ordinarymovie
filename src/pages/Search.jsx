@@ -22,6 +22,12 @@ export const Search = () => {
 		setHistory(updatedHistory)
 	}
 
+
+	
+	
+
+
+
 	return (
 			<div className="my-5">
 				<form onSubmit={handleSubmit}>

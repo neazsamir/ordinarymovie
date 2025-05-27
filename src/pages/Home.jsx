@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '../components/ui/Button';
 import { MovieCard } from '../components/ui/MovieCard';
 import { Overlay } from '../components/ui/Overlay';
@@ -28,7 +28,7 @@ export const Home = () => {
     
     useScrollRestore(data?.results);
     
-    
+
     
     return (
         <div>
